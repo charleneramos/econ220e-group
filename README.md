@@ -76,7 +76,7 @@ output/
   2. Implements DGP 1 (mixture condition satisfied) and DGP 2 (mixture condition violated).
   3. Runs B = 2,000 Monte Carlo replications with n = 1,000 observations per cell.
   4. Exports two LaTeX tables (`tab_dgp1.tex`, `tab_dgp2.tex`) to `output/tables/`.
-  5. Exports six PNG figures to `output/figures/`.
+  5. Exports five PNG figures to `output/figures/`.
   6. Runs a sensitivity analysis over sample sizes n ∈ {100, 250, 500, 1,000, 2,500, 5,000}.
 
 ### License for Code
