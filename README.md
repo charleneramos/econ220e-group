@@ -1,7 +1,6 @@
 # README for "Roth & Sant’Anna (2023): A Monte Carlo Study"
 
-Roberto Diaz Hernandez, Riana Ramonjamanana, Charlene Ramos
-ECON 220E, March 2026
+Roberto Diaz Hernandez, Riana Ramonjamanana, Charlene Ramos -- ECON 220E, March 2026
 
 ## Overview
 
