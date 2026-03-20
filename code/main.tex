@@ -1,0 +1,345 @@
+\documentclass[12pt]{article}
+
+%,,,,,,,,,,,,,,,,,,,-
+% Packages
+%,,,,,,,,,,,,,,,,,,,-
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, citecolor=black, linkcolor=black, urlcolor=blue}
+\usepackage{titlesec}
+\usepackage{comment}
+\usepackage[labelsep=period]{caption}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+
+%,,,,,,,,,,,,,,,,,,,-
+% Formatting
+%,,,,,,,,,,,,,,,,,,,-
+\titleformat{\section}{\normalfont\large\bfseries}{\Roman{section}.}{0.5em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries\itshape}{\Alph{subsection}.}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.5ex plus .5ex minus .2ex}{1ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{1ex plus .3ex minus .2ex}{0.5ex plus .1ex}
+
+\onehalfspacing
+
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+\setcitestyle{aysep={}}
+
+%--------------------
+% Theorem environments
+%--------------------
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{assumption}{Assumption}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+\title{Roth \& Sant'Anna (2023): A Monte Carlo Study}
+\author{Roberto Diaz Hernandez \and Riana Ramonjamanana \and Charlene Ramos}
+\date{March 18, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary} 
+
+% \subsection*{Overview}
+
+Difference-in-differences (DiD) is one of the most widely used research designs in applied economics, but its validity rests on the parallel trends (PT) assumption: that treated and comparison groups would have followed the same trajectory absent treatment. A recurring practical problem is that PT is not invariant to the scale on which outcomes are measured. A researcher who finds no pre-treatment divergence in levels may find one in logs, or vice versa. \cite{roth2023parallel} ask when this ambiguity can be resolved, characterizing exactly when PT holds under all strictly monotonic transformations of the outcome.
+
+This paper connects two central themes of the class. First, it extends the broader critique of PT fragility, alongside the TWFE problems identified by \cite{goodmanbacon2021} and \cite{dechaisemartin2020}, by showing that even a correctly specified DiD can mislead when PT does not carry over across scales. Second, it motivates the changes-in-changes (CiC) model of \cite{atheyimbens2006} as a natural robust alternative: since functional form robustness requires PT at the CDF level, the CiC model sidesteps the functional form problem by identifying the full counterfactual distribution under structural assumptions. The paper thus both diagnoses a limitation of mean-based DiD and points toward the distributional methods that address it.
+
+\subsection*{Contribution}
+
+Proposition 3.1 establishes that PT is robust to all monotonic transformations if and only if parallel trends holds for the full CDF of untreated potential outcomes, not merely their means. Proposition 3.2 characterizes when this holds: untreated potential outcomes must admit a mixture representation combining a common time-varying component and a group-specific time-invariant component. Outside this structure, functional form invariance will generally fail, and researchers must justify their choice of scale directly.
+
+\subsection*{Relevance to Applied Research}
+
+The absence of pre-trends in a chosen functional form does not validate PT under alternative transformations. However, the distributional PT condition generates a falsification test: the implied counterfactual CDF for the treated group is fully identified from observables, and if it fails monotonicity, functional form invariance is rejected. This diagnostic is easy to implement before committing to a particular outcome transformation.
+
+% \section{2}
+
+% Roth and Sant'Anna (2023) characterize when the parallel trends assumption used for difference-in-differences identification is robust to functional form transformations. The key contribution of their work is the identification of a sufficient condition under which parallel trends in any monotonic functional form implies parallel trends in all monotonic transformations. We design two data generating processes: one satisfying the sufficient condition (favorable case) where parallel trends truly is invariant, and one violating it (unfavorable case) where parallel trends in levels fails to hold in logs. 
+
+% The difference-in-differences (DiD) estimator is one of the most widely used empirical methods in economics for identifying causal treatment effects. The standard identifying assumption of parallel trends requires that in the absence of treatment, the treated and control groups would have experienced equal average changes over time. However, a critical question is whether this assumption is invariant to the functional form in which we measure outcomes.
+
+% This question is of great importance for practitioners. In many economic applications, researchers must choose whether to estimate effects in levels, logarithms, or other nonlinear transformations. For instance, when studying wage effects, is raw difference or log differences most appropriate? For employment, is it best to use levels or logs? If parallel trends holds in one functional form but not others, then standard DiD estimation could be severely biased depending on this choice.
+
+% Roth and Sant'Anna (2023) provide a definitive answer to this question. They characterize precisely when parallel trends is robust to functional form choices. Their main result shows that parallel trends is invariant to all monotonic transformations if and only if a stronger condition holds. This condition requires that the gap between the treated and control groups in their counterfactual outcome distributions remain constant across all quantiles, not solely in expectation.
+
+
+\section{Theoretical properties of functional form invariance in difference-in-differences}
+
+The main theoretical contribution of Roth and Sant'Anna (2023) is to characterize when the standard difference-in-differences parallel trends assumption is invariant to monotonic transformations of the outcome variable. In the two-period difference-in-differences setting, identification of the average treatment effect on the treated relies on equality of changes of the average untreated outcome across treated and comparison groups. Formally, the standard parallel trends assumption requires
+\[
+\mathbb{E}[Y_{i1}(0)\mid D_i=1]-\mathbb{E}[Y_{i0}(0)\mid D_i=1]
+=
+\mathbb{E}[Y_{i1}(0)\mid D_i=0]-\mathbb{E}[Y_{i0}(0)\mid D_i=0].
+\]
+
+Under this condition, the average treatment effect on the treated is identified by the standard difference-in-differences estimator. The paper studies when this identification result remains valid after replacing the outcome by an arbitrary strictly monotonic transformation \(g(Y)\). This stronger requirement implies
+\[
+\mathbb{E}[g(Y_{i1}(0))\mid D_i=1]-\mathbb{E}[g(Y_{i0}(0))\mid D_i=1]
+=
+\mathbb{E}[g(Y_{i1}(0))\mid D_i=0]-\mathbb{E}[g(Y_{i0}(0))\mid D_i=0]
+\]
+for every strictly monotonic function \(g\) for which the expectations are finite.
+
+The first main theoretical result, proposition 3.1, shows that this invariance property holds if and only if a stronger distributional restriction is satisfied. Specifically, parallel trends must hold for the full cumulative distribution function of untreated potential outcomes:
+\[
+F_{Y_{i1}(0)\mid D_i=1}(y)-F_{Y_{i0}(0)\mid D_i=1}(y)
+=
+F_{Y_{i1}(0)\mid D_i=0}(y)-F_{Y_{i0}(0)\mid D_i=0}(y)
+\]
+for every \(y \in \mathbb{R}\).
+
+If the difference between cumulative distribution functions is identical across groups, then equality holds for every strictly monotonic transformation \(g\). Conversely, if invariance holds for all monotonic transformations, then choosing particular functions \(g\) implies equality of the distributional differences pointwise.
+
+An important implication is that when the outcome variable is continuous, parallel trends for cumulative distribution functions is equivalent to parallel trends for probability density functions almost everywhere. Denoting densities by \(f_{Y_{it}(0)\mid D_i=d}(y)\), the condition becomes
+\[
+f_{Y_{i1}(0)\mid D_i=1}(y)-f_{Y_{i0}(0)\mid D_i=1}(y)
+=
+f_{Y_{i1}(0)\mid D_i=0}(y)-f_{Y_{i0}(0)\mid D_i=0}(y)
+\]
+for almost every \(y\). In this case, functional form invariance requires that the full untreated density shifts over time identically across groups.
+
+The second theoretical result, Proposition 3.2, characterizes the distributions that satisfy this condition. Assuming that untreated outcome distributions admit Radon--Nikodym densities with respect to a common dominating measure, the paper shows that the untreated potential outcomes can be represented as
+\[
+F_{Y_{it}(0)\mid D_i=d}(y)=\theta G_t(y)+(1-\theta)H_d(y),
+\]
+where \(G_t(y)\) depends only on time, \(H_d(y)\) depends only on treatment status, and \(\theta \in [0,1]\).
+
+The parameter \(\theta\) determines the economic interpretation of the decomposition. When \(\theta=1\), the untreated distributions coincide across groups in every period:
+\[
+F_{Y_{it}(0)\mid D_i=1}(y)=F_{Y_{it}(0)\mid D_i=0}(y),
+\]
+which corresponds to a setting of effective random assignment. In this case, treatment and comparison groups share the same untreated distribution before and after treatment.
+
+When \(\theta=0\), untreated distributions are group-specific but invariant over time:
+\[
+F_{Y_{i1}(0)\mid D_i=d}(y)=F_{Y_{i0}(0)\mid D_i=d}(y),
+\]
+for \(d \in \{0,1\}\). Identification then follows because untreated outcomes are stationary within each group.
+
+The intermediate case \(0<\theta<1\) corresponds to a mixture structure in which each group contains two components. A fraction \(\theta\) follows a common time-varying distribution \(G_t(y)\), while the remaining fraction \(1-\theta\) follows a group-specific distribution \(H_d(y)\) that does not change over time. Formally,
+\[
+F_{Y_{it}(0)\mid D_i=d}(y)=\theta G_t(y)+(1-\theta)H_d(y)
+\]
+implies that both common time variation and permanent group heterogeneity coexist.
+
+A key implication of Proposition 3.2 is that invariance to functional form requires highly restrictive distributional structure whenever treatment is not randomly assigned. In many empirical applications, these conditions are unlikely to hold exactly, which implies that researchers must justify the choice of functional form directly rather than assuming robustness across transformations.
+
+The theoretical results also imply a directly testable restriction. Rearranging the cumulative distribution condition yields the implied untreated counterfactual distribution for the treated group in the post-treatment period:
+\[
+F_{Y_{i1}(0)\mid D_i=1}(y)
+=
+F_{Y_{i0}(0)\mid D_i=1}(y)
++
+F_{Y_{i1}(0)\mid D_i=0}(y)
+-
+F_{Y_{i0}(0)\mid D_i=0}(y).
+\]
+
+This expression is the distributional analogue of the standard difference-in-differences estimator. The right-hand side is fully identified from observable distributions: the pre-treatment distribution of the treated group, together with the pre-treatment and post-treatment distributions of the comparison group. Under the null hypothesis of functional form invariance, these observed components imply the untreated post-treatment distribution for treated units.
+
+Because the left-hand side must be a valid cumulative distribution function, the right-hand side must satisfy the defining properties of a cumulative distribution function. In particular, it must remain weakly increasing in \(y\). If the implied counterfactual distribution decreases over some range of the support, then the resulting function cannot represent a valid probability distribution. In that case, the distributional parallel trends condition is violated, and the null hypothesis that parallel trends is invariant to functional form is rejected.
+
+This provides a practical falsification test: if the estimated counterfactual distribution implied by the data fails monotonicity, then the stronger distributional assumptions required for invariance across transformations do not hold.
+
+\section{Monte Carlo simulations}
+
+We evaluate the theoretical results of Roth and Sant'Anna (2023) through two Monte Carlo experiments. Both experiments are set in the two-period, two-group framework with zero treatment effect ($\tau_{\text{ATT}} = 0$). Any nonzero DiD estimate is attributable to the failure of parallel trends under the chosen functional form. All outcomes are drawn from log-normal distributions, which provide a natural testbed given their means are nonlinear functions of the distributional parameters. We set $n = 1{,}000$ observations per group-period cell and conduct $B = 2{,}000$ replications in each experiment. Inference is based on a Wald test at the 5\% level, where the standard error is computed from the sample variances in each cell.
+
+\subsection*{DGP 1: Favorable case --- Invariant parallel trends}
+
+The first data-generating process satisfies the mixture representation of Proposition 3.2, ensuring that parallel trends is invariant to functional form. We generate counterfactual outcomes for each group-period cell as a 50--50 mixture of two log-normal components:
+\[
+F_{Y_{it}(0) \mid D_i=d}(y) = 0.5 \cdot G_t(y) + 0.5 \cdot H_d(y),
+\]
+where $G_t \sim \text{Lognormal}(2 + t,\; 1)$ captures common time variation and $H_d \sim \text{Lognormal}(3 + d,\; 1)$ captures permanent group heterogeneity. This gives us: 
+\begin{align*}
+G_0(y) &= \Phi\left(\frac{\ln y - 2}{1}\right) \quad \text{(pre-period time effect)}\\
+G_1(y) &= \Phi\left(\frac{\ln y - 3}{1}\right) \quad \text{(post-period time effect)}\\
+H_0(y) &= \Phi\left(\frac{\ln y - 3}{1}\right) \quad \text{(control group effect)}\\
+H_1(y) &= \Phi\left(\frac{\ln y - 4}{1}\right) \quad \text{(treated group effect)}
+\end{align*}
+with $\Phi$ as the standard normal CDF. Note that $\theta = 0.5$ throughout, so neither the time effect nor the group effect dominates.
+
+Since the time-varying component $G_t$ shifts identically across groups while the group-specific component $H_d$ remains fixed over time, the distributional parallel trends condition of Proposition 3.1 is satisfied by construction. The expected values confirm that the DiD estimand equals zero in both levels and logs. In levels, $\mathbb{E}[Y|d, t] = 0.5\exp(\mu_1 + 0.5) + 0.5\exp(\mu_2 + 0.5)$, giving group means of 22.65 (control, pre), 33.12 (control, post), 51.10 (treated, pre), and 61.57 (treated, post); the DiD equals $(61.57 - 51.10) - (33.12 - 22.65) = 0$. In logs, $\mathbb{E}[\log Y|d, t] = 0.5\mu_1 + 0.5\mu_2$, giving 2.50, 3.00, 3.00, and 3.50 respectively, with a DiD of $(3.50 - 3.00) - (3.00 - 2.50) = 0$. 
+
+Table~\ref{tab:dgp1} reports the Monte Carlo results. In both levels and logs, the mean DiD estimate is centered near zero, the empirical bias is negligible relative to the standard deviation, and the rejection rate is close to the 5\% level. This confirms that when the mixture representation is satisfied, the standard DiD estimator recovers an unbiased estimate of the ATT regardless of the functional form applied to the outcome.
+
+% \begin{table}[H]
+% \centering
+% \caption{Monte Carlo results: DGP~1 (favorable case)}
+% \label{tab:dgp1}
+% \begin{tabular}{lcccccc}
+% \toprule
+% $g(\cdot)$ & True DiD & Mean $\hat{\tau}$ & Bias & SD & Mean SE & Rej.\ Rate \\
+% \midrule
+% Levels & 0.000 & 0.003 & 0.003 & 2.821 & 2.810 & 0.051 \\
+% Logs   & 0.000 & 0.000 & 0.000 & 0.045 & 0.045 & 0.049 \\
+% \bottomrule
+% \end{tabular}
+% \vspace{0.5cm}
+% \caption*{\small Note. $B = 2{,}000$ replications, $n = 1{,}000$ per cell. True ATT $= 0$ under all transformations.}
+% \end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Monte Carlo results: DGP~1 (favorable case)}
+  \label{tab:dgp1}
+  \input{tables/tab_dgp1.tex}
+  \vspace{0.5cm} 
+  \caption*{\small Note. $B = 2{,}000$ replications, $n = 1{,}000$ per cell. True ATT $= 0$ under all transformations.}
+\end{table} 
+
+The contrast between the two DGPs is visible at the distributional level. Figure~\ref{fig:densities} plots the population densities for all four group-period cells under each DGP. In the left panel (DGP~1), both groups exhibit the bimodal shape generated by the 50--50 mixture; the treated densities are shifted rightward relative to the control densities, but the overall shape of each density is governed by the same pair of log-normal components. In the right panel (DGP~2), the control group's heavy-tailed density contrasts sharply with the treated group's concentrated density, foreshadowing the divergence in level-scale moments.
+
+\begin{figure}[H]
+\centering
+\caption{Population densities of untreated potential outcomes}
+\label{fig:densities}
+\includegraphics[width=\textwidth]{fig_densities.png}
+\end{figure}
+
+A further diagnostic confirms that the change in density across periods is identical for the two groups. Because $G_t$ shifts from $\ln(2,1)$ to $\ln(3,1)$ and affects both groups equally, while $H_d$ contributes a fixed group-specific density component, the change-in-density function $f_{Y_{i1}(0)|D_i=d}(y) - f_{Y_{i0}(0)|D_i=d}(y)$ is the same for $d = 0$ and $d = 1$. This equality of density shifts is the pointwise analogue of distributional parallel trends and visually corroborates the invariance result.
+
+\begin{figure}[H]
+\centering
+\caption{Change in density across periodsfor control and treated groups}
+\includegraphics[width=\textwidth]{fig_delta_density.png}
+\caption*{\small Note. Left: DGP~1 (curves overlap, confirming distributional parallel trends). Right: DGP~2 (curves diverge, signaling a violation).}
+\label{fig:delta_density}
+\vspace{-0.5cm} 
+\end{figure}
+
+\subsection*{DGP 2: Unfavorable case --- Non-invariant parallel trends}
+
+The second DGP violates the mixture representation by allowing the treated and control groups to feature different scale parameters. Specifically, each group-period cell follows a log-normal distribution:
+
+\begin{tabular}{l l}
+Control & Pre-period: $Y_{i0}(0) \sim \text{Lognormal}(\mu=2.5, \sigma=1.0)$ \\
+ & Post-period: $Y_{i1}(0) \sim \text{Lognormal}(\mu=3.0, \sigma=1.0)$ \\[0.5em]
+Treated & Pre-period: $Y_{i0}(0) \sim \text{Lognormal}(\mu=3.0, \sigma=0.5)$ \\
+ & Post-period (counterfactual): $Y_{i1}(0) \sim \text{Lognormal}(\mu=3.5, \sigma=0.5)$
+\end{tabular}\\
+
+% \begin{center}
+% \begin{tabular}{llcc}
+% \toprule
+% Group & Period & $\mu$ & $\sigma$ \\
+% \midrule
+% Control & Pre  & 2.5 & 1.0 \\
+% Control & Post & 3.0 & 1.0 \\
+% Treated & Pre  & 3.0 & 0.5 \\
+% Treated & Post (counterfactual) & 3.5 & 0.5 \\
+% \bottomrule
+% \end{tabular}
+% \end{center}
+
+\noindent The key feature is that the control group has $\sigma = 1.0$ while the treated group has $\sigma = 0.5$. Although the log-mean shift is identical across groups ($\Delta\mu = 0.5$ for both), the nonlinear mapping from log-means to level-means implies that the level-scale changes differ. For log-normal variables, $\mathbb{E}[Y] = \exp(\mu + \sigma^2/2)$, so the level-scale group means are 20.09, 33.12, 22.76, and 37.52 for (control pre, control post, treated pre, treated post), respectively. In logs, the DiD estimand is $(3.5 - 3.0) - (3.0 - 2.5) = 0$, whereas in levels the DiD is $(37.52 - 22.76) - (33.12 - 20.09) = 1.74 \neq 0$.
+
+Table~\ref{tab:dgp2} shows that the Monte Carlo results reflect 
+this asymmetry precisely. In logs, the DiD estimator is unbiased: 
+the mean estimate is $-0.001$, the bias is negligible, and the 
+rejection rate of $0.051$ is close to the $5\%$ level. 
+In levels, however, the estimator exhibits a systematic positive 
+bias of $1.719$, reflecting the mismatch between log-scale parallel 
+trends and level-scale moments. The rejection rate of $0.188$ is 
+nearly four times the nominal level, and as shown in Figure~\ref{fig:sensitivity}, 
+this rate increases monotonically with sample size as the fixed bias 
+dominates the shrinking standard error. A researcher who estimates 
+a DiD model in levels would incorrectly conclude that the treatment 
+had a large positive effect of approximately $1.72$ units, when the 
+true $\tau_{\text{ATT}} = 0$ under all transformations.
+
+% \begin{table}[H]
+% \centering
+% \caption{Monte Carlo results: DGP~2 (unfavorable case)}
+% \label{tab:dgp2}
+% \begin{tabular}{lcccccc}
+% \toprule
+% $g(\cdot)$ & True DiD & Mean $\hat{\tau}$ & Bias & SD & Mean SE & Rej.\ Rate \\
+% \midrule
+% Levels & 0.000 & 1.742 & 1.742 & 1.752 & 1.744 & 0.632 \\
+% Logs   & 0.000 & 0.000 & 0.000 & 0.044 & 0.045 & 0.050 \\
+% \bottomrule
+% \end{tabular}
+% \vspace{0.5cm}
+% \caption*{\small Note. $B = 2{,}000$ replications, $n = 1{,}000$ per cell. True ATT $= 0$; PT holds in logs but not levels.}
+% \end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Monte Carlo results: DGP~2 (unfavorable case)}
+  \label{tab:dgp2}
+  \input{tables/tab_dgp2.tex}
+  \vspace{0.5cm} 
+  \caption*{\small Note. $B = 2{,}000$ replications, $n = 1{,}000$ per cell. True ATT $= 0$ under all transformations.}
+  \vspace{-0.5cm} 
+\end{table}
+
+The source of the bias is visible in the density-change diagnostic. In DGP~1, the change in density between periods is identical for the control and treated groups, reflecting the common time-varying component $G_t$ in the mixture. In DGP~2, the shapes of the density changes are markedly different. The control group's broad-tailed log-normal generates a more dispersed shift, whereas the treated group's concentrated density shifts more sharply. This divergence signals that the distributional parallel trends condition is violated.
+
+We also apply the falsification test proposed in the paper. Under distributional parallel trends, the implied counterfactual CDF for treated units in the post-treatment period is
+\[
+\hat{F}_{Y_{i1}(0)|D_i=1}(y) = F_{Y_{i0}(0)|D_i=1}(y) + F_{Y_{i1}(0)|D_i=0}(y) - F_{Y_{i0}(0)|D_i=0}(y).
+\]
+Figure~\ref{fig:cdf} displays the results for both DGPs. In the left panel (DGP~1), the implied counterfactual CDF coincides with the true counterfactual, confirming that the distributional parallel trends condition is satisfied and the DiD approach to the CDF produces a valid probability distribution. In the right panel (DGP~2), the implied and true counterfactual CDFs diverge noticeably. For DGP~2, the implied CDF departs from the true counterfactual $F_{Y_{i1}(0)|D_i=1}(y) = \Phi\!\bigl((\ln y - 3.5)/0.5\bigr)$ because the thin-tailed treated distribution and the heavy-tailed control distribution evolve on different scales. Combining their CDF shifts yields an object that does not match the actual counterfactual. This mismatch is directly linked to the bias in the levels DiD estimator and illustrates how the diagnostic tools of Roth and Sant'Anna (2023) can alert researchers to functional-form sensitivity before estimation.
+
+\begin{figure}[H]
+\centering
+\caption{Implied versus true counterfactual CDF for the treated group}
+\includegraphics[width=0.86\textwidth]{fig_counterfactual_cdf.png}
+\caption*{\small Note. Left: DGP~1 (implied and true CDFs coincide). Right: DGP~2 (implied CDF diverges from the true counterfactual, signaling that distributional parallel trends is violated).}
+\label{fig:cdf}
+\vspace{-0.5cm} 
+\end{figure}
+
+Figure~\ref{fig:sampling} summarizes the Monte Carlo evidence by plotting the sampling distributions of the levels DiD estimator across both DGPs. Under DGP~1, the levels estimator is centered at zero, confirming size control. Under DGP~2, the levels estimator is shifted to the right by approximately 1.74, with only modest overlap with the null hypothesis value. This figure provides a compact visual summary of the functional-form-induced bias documented in Tables~\ref{tab:dgp1} and~\ref{tab:dgp2}.
+
+\begin{figure}[H]
+\centering
+\caption{Sampling distributions of the DiD estimator}
+\includegraphics[width=0.86\textwidth]{fig_sampling_dist.png}
+\caption*{\small Note. The dashed vertical line marks $\hat{\tau}_{\text{DiD}} = 0$. Under DGP~2, the levels estimator is shifted rightward due to functional-form-induced bias.}
+\label{fig:sampling}
+\vspace{-0.5cm} 
+\end{figure}
+
+\subsection*{Sample-size sensitivity}
+
+To assess how the functional form induced bias interacts with sample size, we repeat the DGP~2 simulations for $n \in \{100, 250, 500, 1{,}000, 2{,}500, 5{,}000\}$ per cell with $B = 1{,}000$ replications at each sample size. Figure~\ref{fig:sensitivity} plots the rejection rate of the 5\% Wald test against the sample size on a logarithmic scale. In the logs specification, the rejection rate remains close to 5\% across all sample sizes, confirming correct size. In the levels specification, the rejection rate increases monotonically with $n$: at $n = 100$ the test has limited power to detect the bias, but by $n = 1{,}000$ it exceeds 60\%, and at $n = 5{,}000$ it approaches unity. This pattern reflects the fact that the bias is fixed at approximately 1.74 regardless of sample size, while the standard error shrinks at rate $n^{-1/2}$. As a result, functional-form sensitivity that might go unnoticed in small samples becomes increasingly consequential as the sample grows---precisely the regime in which applied researchers are most likely to report statistically significant (but spurious) treatment effects.
+
+\begin{figure}[H]
+\centering
+\caption{Rejection rates of the 5\% Wald test as a function of sample size}
+\includegraphics[width=\textwidth]{fig_sensitivity_rejection.png}
+\caption*{\small Note. The dashed horizontal line marks the 5\% level. Under DGP~2, the levels rejection rate increases with $n$ because the fixed bias dominates the shrinking standard error.}
+\label{fig:sensitivity}
+\vspace{-0.5cm} 
+\end{figure}
+
+\section{Critical assessment}
+
+\subsection*{Strengths} 
+The paper's primary strength is its theoretical completeness. Rather than offering a partial result or a set of sufficient conditions, Proposition 3.1 provides a full equivalence: PT is robust to all monotonic transformations if and only if the distributional PT condition holds. Proposition 3.2 adds economic content by translating the abstract distributional requirement into an interpretable mixture structure, making clear what must be true about the data-generating process for invariance to hold. The falsification test is straightforward to implement, and the minimum wage illustration demonstrates its practical value. Together, the theoretical and empirical components form a coherent package that is both rigorous and practically actionable.
+
+\subsection*{Weaknesses} The results rely on a two-period, two-group framework; while the authors note extensions to staggered designs, these are not formally developed in the paper. The mixture representation is an ``essentially only if'' result, leaving open edge cases where the partition across periods may change, a caveat that could matter in practice but is difficult to verify. Finally, the falsification test only detects violations when the implied counterfactual density turns negative, so it may have limited power against subtle functional-form sensitivity, and as the authors acknowledge, failure to reject does not guarantee robustness.\\
+
+%\cite{roth2023parallel} clarify when DiD estimates are robust to functional form and shifts the burden of justification onto the researcher: noting the absence of pre-trends in a chosen scale is no longer sufficient. The falsification test makes this demand actionable. Extending the framework to staggered designs and developing more powerful diagnostics remain open directions.
+
+\vspace{-0.5cm} 
+
+\bibliographystyle{chicago}
+\bibliography{refs}
+\end{document}
+

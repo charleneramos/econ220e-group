@@ -1,0 +1,23 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Athey and Imbens}{Athey and Imbens}{2006}]{atheyimbens2006}
+Athey, S. and G.~W. Imbens (2006).
+\newblock Identification and inference in nonlinear difference-in-differences models.
+\newblock {\em Econometrica\/}~{\em 74\/}(2), 431--497.
+
+\bibitem[\protect\citeauthoryear{de~Chaisemartin and D'Haultf{\oe}uille}{de~Chaisemartin and D'Haultf{\oe}uille}{2020}]{dechaisemartin2020}
+de~Chaisemartin, C. and X.~D'Haultf{\oe}uille (2020).
+\newblock Two-way fixed effects estimators with heterogeneous treatment effects.
+\newblock {\em American Economic Review\/}~{\em 110\/}(9), 2964--2996.
+
+\bibitem[\protect\citeauthoryear{Goodman-Bacon}{Goodman-Bacon}{2021}]{goodmanbacon2021}
+Goodman-Bacon, A. (2021).
+\newblock Difference-in-differences with variation in treatment timing.
+\newblock {\em Journal of Econometrics\/}~{\em 225\/}(2), 254--277.
+
+\bibitem[\protect\citeauthoryear{Roth and Sant'Anna}{Roth and Sant'Anna}{2023}]{roth2023parallel}
+Roth, J. and P.~H.~C. Sant'Anna (2023).
+\newblock When is parallel trends sensitive to functional form?
+\newblock {\em Econometrica\/}~{\em 91\/}(2), 737--747.
+
+\end{thebibliography}
