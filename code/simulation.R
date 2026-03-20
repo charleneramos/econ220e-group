@@ -387,19 +387,5 @@ p_sens_rej <- ggplot(sens_df, aes(x = n, y = Reject_Rate,
 ggsave("output/figures/fig_sensitivity_rejection.png", p_sens_rej, width = 7, height = 3.5)
 cat("Saved: output/figures/fig_sensitivity_rejection.png\n")
 
-# Panel B: RMSE vs n
-p_sens_rmse <- ggplot(sens_df, aes(x = n, y = RMSE,
-                                    color = Transformation, shape = Transformation)) +
-  geom_line(linewidth = 0.7) +
-  geom_point(size = 2.5) +
-  facet_wrap(~ DGP, ncol = 2, scales = "free_y") +
-  scale_color_manual(values = c("Levels" = col_ctrl, "Logs" = col_trt)) +
-  scale_x_log10(breaks = n_vec, labels = scales::comma) +
-  labs(x = expression(italic(n) ~ "(per cell)"), y = "RMSE") +
-  theme_paper
-
-ggsave("output/figures/fig_sensitivity_rmse.png", p_sens_rmse, width = 7, height = 3.5)
-cat("Saved: output/figures/fig_sensitivity_rmse.png\n")
-
 
 
